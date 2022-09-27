@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
-Entity
+@Entity
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
