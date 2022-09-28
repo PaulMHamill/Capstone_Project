@@ -1,6 +1,5 @@
 package persistance.predicates;
 
-import com.codeclan.example.bookingservice.models.QHotel;
 import com.demo.domain.location.QAddress;
 import com.querydsl.core.types.Predicate;
 
