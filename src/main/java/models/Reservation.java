@@ -1,12 +1,16 @@
 package models;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Reservation {
+    public static final double TAX_AMOUNT = 0.10;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -14,7 +18,7 @@ public class Reservation {
     private UUID reservationId = UUID.randomUUID();
 
     @OneToOne(mappedBy = "reservation")
-    private House house;
+    private Room room;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -37,6 +41,8 @@ public class Reservation {
     private Set<Extra> generalExtras = new HashSet<>();
 
     // List because the UI should display plans by Guest order.
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<MealPlan> mealPlans = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     private CompletedPayment completedPayment;
@@ -62,12 +68,12 @@ public class Reservation {
         this.id = id;
     }
 
-    public House getHouse() {
-        return house;
+    public Room getRoom() {
+        return room;
     }
 
-    public void setHouse(House house) {
-        this.house = house;
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
     public CompletedPayment getCompletedPayment() {
@@ -141,6 +147,13 @@ public class Reservation {
         this.generalExtras = generalExtras;
     }
 
+    public List<MealPlan> getMealPlans() {
+        return mealPlans;
+    }
+
+    public void setMealPlans(List<MealPlan> mealPlans) {
+        this.mealPlans = mealPlans;
+    }
 
     public ReservationDates getDates() {
         return dates;
@@ -209,7 +222,7 @@ public class Reservation {
         if (nights == 0) {
             return BigDecimal.ZERO;
         }
-        return House.getCostPerNight().multiply(BigDecimal.valueOf(nights));
+        return room.getCostPerNight().multiply(BigDecimal.valueOf(nights));
     }
 
     /**
@@ -241,14 +254,66 @@ public class Reservation {
      *
      * @return Total cost of all guests meal plans
      */
+    public BigDecimal getTotalMealPlansCost() {
+        return mealPlans.stream()
+                .map(MealPlan::getTotalMealPlanCost)
+                .reduce(BigDecimal.ZERO, BigDecimal::add, BigDecimal::add);
+    }
 
     /**
      * Total cost including everything!
      * Provided separately to allow break down to sub totals on invoices.
      */
-    public BigDecimal getTotalCost() {
+    public BigDecimal getTotalCostExcludingTax() {
         return getTotalRoomCostWithLateCheckoutFee()
-                .add(getTotalGeneralExtrasCost());
+                .add(getTotalGeneralExtrasCost())
+                .add(getTotalMealPlansCost());
+    }
+
+    /**
+     * Provided separately to allow break down to sub totals on invoices.
+     *
+     * @return The taxable amount from the total cost. Eg 10% of $100 = $10.
+     */
+    public BigDecimal getTaxableAmount() {
+        return getTotalCostExcludingTax().multiply(BigDecimal.valueOf(TAX_AMOUNT));
+    }
+
+    /**
+     * Provided separately to allow break down to sub totals on invoices.
+     *
+     * @return The total cost including tax.
+     */
+    public BigDecimal getTotalCostIncludingTax() {
+        return getTotalCostExcludingTax().add(getTaxableAmount());
+    }
+
+
+    /**
+     * Creates a new {@code MealPlan} for each {@code Guest} and assigns the result to the internal {@code mealPlans}
+     * instance variable.
+     *
+     * <p>The reason this modifies internal state is to ensure all the {@code MealPlan}s are setup in sorted
+     * order ready to be binded to dynamic fields in thymeleaf template.</p>
+     */
+    public void createMealPlans() {
+        mealPlans = guests.stream()
+                .map(guest -> new MealPlan(guest, this))
+                .sorted(Comparator.comparing(MealPlan::getGuest, Guest.comparator()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Since {@link #createMealPlans} creates a meal plan for each {@code Guest}. Simply checking the list size is
+     * not going to tell you if the meal plans are empty. Instead empty is defined by the total being zero dollars.
+     *
+     * @return {@code true} if all meal plans add up to 0.
+     */
+    public boolean hasEmptyMealPlans() {
+        return mealPlans.stream()
+                .map(MealPlan::getTotalMealPlanCost)
+                .reduce(BigDecimal.ZERO, BigDecimal::add, BigDecimal::add)
+                .equals(BigDecimal.ZERO);
     }
 
     @Override
@@ -264,4 +329,3 @@ public class Reservation {
         return Objects.hash(reservationId);
     }
 }
-

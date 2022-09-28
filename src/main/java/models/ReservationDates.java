@@ -3,11 +3,15 @@ package models;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
+@Embeddable
 public class ReservationDates {
     @Column(nullable = false)
     @NotNull(message = "Check in date required")
@@ -113,5 +117,32 @@ public class ReservationDates {
         return Optional.empty();
     }
 
-    public static class ValidationErro
+    public static class ValidationError {
+        private String code;
+        private String reason;
+
+        public ValidationError(String code, String reason) {
+            this.code = code;
+            this.reason = reason;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getReason() {
+            return reason;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "ReservationDates{" +
+                "checkInDate=" + checkInDate +
+                ", checkOutDate=" + checkOutDate +
+                ", estimatedCheckInTime=" + estimatedCheckInTime +
+                ", lateCheckout=" + lateCheckout +
+                ", policyAcknowledged=" + policyAcknowledged +
+                '}';
+    }
 }
