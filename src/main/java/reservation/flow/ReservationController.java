@@ -74,13 +74,6 @@ public class ReservationController {
         return "reservation/dates";
     }
 
-    /**
-     * BindingResult must be directly after the @Valid object.
-     * https://stackoverflow.com/questions/30297719/cannot-get-validation-working-with-spring-boot-and-thymeleaf/30298348
-     * <p>
-     * {@literal @Valid} @ModelAttribute DateForm dateForm - means the post request contains the form body which will spring will create
-     * into a domain object for us and validate it using the JPA annotations.
-     */
     @PostMapping("/reservation/dates")
     public String dates(@Valid @ModelAttribute("reservationFlow") ReservationFlow reservationFlow,
                         BindingResult bindingResult,

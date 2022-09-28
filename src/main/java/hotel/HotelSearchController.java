@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import persistance.HotelRepository;
 import persistance.RoomRepository;
-import persistance.predicates.RoomPredicates;
+//import persistance.predicates.RoomPredicates;
 
 @Controller
 public class HotelSearchController {
@@ -36,14 +36,14 @@ public class HotelSearchController {
         return "/hotel/hotels";
     }
 
-    @GetMapping(value = "/hotel/{id}/rooms")
-    public String getHotelRooms(@PathVariable("id") Long id, Pageable pageable, Model model) throws NotFoundException {
-        Hotel hotel = hotelRepository.findById(id).orElseThrow(NotFoundException::new);
-        Page<Room> availableRooms = roomRepository.findAll(RoomPredicates.availableRoom(id), pageable);
-        model.addAttribute("rooms", availableRooms);
-        model.addAttribute("hotel", hotel);
-        return "/hotel/rooms";
-    }
+//    @GetMapping(value = "/hotel/{id}/rooms")
+//    public String getHotelRooms(@PathVariable("id") Long id, Pageable pageable, Model model) throws NotFoundException {
+//        Hotel hotel = hotelRepository.findById(id).orElseThrow(NotFoundException::new);
+//        Page<Room> availableRooms = roomRepository.findAll(//Room.availableRoom(id), pageable);
+//        model.addAttribute("rooms", availableRooms);
+//        model.addAttribute("hotel", hotel);
+//        return "/hotel/rooms";
+//    }
 
 
 

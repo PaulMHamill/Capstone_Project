@@ -112,14 +112,6 @@ public class Reservation {
     public void clearGuests() {
         guests.clear();
     }
-
-    /**
-     * Allows UI to easily remove a {@code Guest} in the 'add guest' page. Its easier for the UI to 'POST' a guest id
-     * rather than provide the full {@code Guest} details that match {@code Guest.equals/hashCode}.
-     *
-     * @param guestId The temporarily assigned guest id.
-     * @return {@code true} if the {@code Guest} was removed otherwise {@code false}.
-     */
     public boolean removeGuestById(UUID guestId) {
         return guests.removeIf(guest -> guest.getTempId().equals(guestId));
     }
@@ -132,12 +124,6 @@ public class Reservation {
         return generalExtras;
     }
 
-    /**
-     * All {@code Extra}s must be {@code Extra.Category.General} otherwise an IllegalArgumentException is thrown.
-     *
-     * @param generalExtras All {@code Extra}s must be {@code Extra.Category.General}.
-     * @throws IllegalArgumentException
-     */
     public void setGeneralExtras(Set<Extra> generalExtras) throws IllegalArgumentException {
         boolean containsInvalidCategories
                 = generalExtras.stream().anyMatch(extra -> extra.getCategory() != Extra.Category.General);
@@ -183,7 +169,7 @@ public class Reservation {
     public Extra.Type getExtraPricingType() {
         switch (room.getRoomType()) {
             case Luxury:
-            case Business:
+            case Double:
                 return Extra.Type.Premium;
             default:
                 return Extra.Type.Basic;
@@ -204,7 +190,7 @@ public class Reservation {
     public BigDecimal getLateCheckoutFee() {
         switch (room.getRoomType()) {
             case Luxury:
-            case Business:
+            case Double:
                 return BigDecimal.ZERO;
             default:
                 return room.getHotel().getLateCheckoutFee();
