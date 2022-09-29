@@ -3,6 +3,7 @@ package components;
 import models.Guest;
 import models.Pod;
 import models.PodType;
+import models.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -59,6 +60,12 @@ public class DataLoader implements ApplicationRunner {
 
         Pod pod6 = new Pod("Harris", PodType.DOUBLE, 400.00);
         podRepository.save(pod6);
+
+        Reservation reservation1 = new Reservation(2, pod1);
+        reservationRepository.save(reservation1);
+
+        Reservation reservation2 = new Reservation(3, pod3);
+        reservationRepository.save(reservation2);
 
 
 
