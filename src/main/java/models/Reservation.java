@@ -1,8 +1,20 @@
 package models;
 
-public class Reservation {
+import javax.persistence.*;
+import java.io.Serializable;
 
+@Entity
+@Table(name = "reservation")
+public class Reservation implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "numberOfNights")
     private int numberOfNights;
+
+    @Column(name = "pod")
     private Pod pod;
 
     public Reservation(int numberOfNights, Pod pod) {
