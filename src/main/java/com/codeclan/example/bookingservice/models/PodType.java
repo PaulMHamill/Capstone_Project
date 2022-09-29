@@ -1,4 +1,4 @@
-package models;
+package com.codeclan.example.bookingservice.models;
 
 public enum PodType {
     DOUBLE(2);

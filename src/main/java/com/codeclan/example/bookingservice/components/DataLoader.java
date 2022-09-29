@@ -1,21 +1,20 @@
-package components;
+package com.codeclan.example.bookingservice.components;
 
-import models.Guest;
-import models.Pod;
-import models.PodType;
-import models.Reservation;
+import com.codeclan.example.bookingservice.models.Guest;
+import com.codeclan.example.bookingservice.models.Pod;
+import com.codeclan.example.bookingservice.models.PodType;
+import com.codeclan.example.bookingservice.models.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import repositories.GuestRepository;
-import repositories.PodRepository;
-import repositories.ReservationRepository;
+import com.codeclan.example.bookingservice.repositories.GuestRepository;
+import com.codeclan.example.bookingservice.repositories.PodRepository;
+import com.codeclan.example.bookingservice.repositories.ReservationRepository;
 
 import java.text.ParseException;
 
-@Profile("!test")
+//@Profile("!test")
 @Component
 public class DataLoader implements ApplicationRunner {
 
@@ -26,10 +25,13 @@ public class DataLoader implements ApplicationRunner {
     @Autowired
     ReservationRepository reservationRepository;
 
+
     public DataLoader() {
     }
 
     public void run(ApplicationArguments args) throws ParseException {
+
+        System.out.println("DATA LOADER");
 
         Guest guest1 = new Guest("Paul", "Hamill", "PH@gmail.com");
         guestRepository.save(guest1);
@@ -61,10 +63,10 @@ public class DataLoader implements ApplicationRunner {
         Pod pod6 = new Pod("Harris", PodType.DOUBLE, 400.00);
         podRepository.save(pod6);
 
-        Reservation reservation1 = new Reservation(2, pod1);
+        Reservation reservation1 = new Reservation(2, pod1, guest1);
         reservationRepository.save(reservation1);
 
-        Reservation reservation2 = new Reservation(3, pod3);
+        Reservation reservation2 = new Reservation(3, pod3, guest3 );
         reservationRepository.save(reservation2);
 
 

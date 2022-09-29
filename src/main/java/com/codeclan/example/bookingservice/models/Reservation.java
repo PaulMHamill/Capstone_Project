@@ -1,33 +1,35 @@
-package models;
+package com.codeclan.example.bookingservice.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "reservation")
+@Table(name = "reservations")
 public class Reservation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne
-    @JoinColumn(name = "GUEST_ID")
+    @ManyToOne
+    @JoinColumn(name = "guest_id")
     private Guest guest;
 
-    @OneToOne
-    @JoinColumn(name = "POD_ID")
-    private Pod pod_id;
+    @ManyToOne
+    @JoinColumn(name = "pod_id")
+    private Pod pod;
 
     @Column(name = "numberOfNights")
     private int numberOfNights;
 
-    @Column(name = "pod")
-    private Pod pod;
+    public Reservation() {
+    }
 
-    public Reservation(int numberOfNights, Pod pod) {
+
+    public Reservation(int numberOfNights, Pod pod, Guest guest) {
         this.numberOfNights = numberOfNights;
         this.pod = pod;
+        this.guest = guest;
     }
 
     public int getNumberOfNights() {
@@ -62,20 +64,13 @@ public class Reservation implements Serializable {
         this.guest = guest;
     }
 
-    public Pod getPod_id() {
-        return pod_id;
-    }
-
-    public void setPod_id(Pod pod_id) {
-        this.pod_id = pod_id;
-    }
 
     public double getTotalForStay() {
         return this.numberOfNights * this.pod.getNightlyRate();
     }
 
-    public Reservation createReservation(Pod pod, int numberOfNights) {
-        Reservation reservation = new Reservation(numberOfNights, pod);
-        return reservation;
-    }
+//    public Reservation createReservation(Pod pod, int numberOfNights, Guest guest) {
+//        Reservation reservation = new Reservation(numberOfNights, pod);
+//        return reservation;
+
 }

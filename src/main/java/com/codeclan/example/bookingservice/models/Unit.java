@@ -1,4 +1,4 @@
-package models;
+package com.codeclan.example.bookingservice.models;
 
 import java.util.ArrayList;
 

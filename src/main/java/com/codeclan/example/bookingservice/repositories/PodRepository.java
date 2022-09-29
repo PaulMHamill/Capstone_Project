@@ -1,6 +1,6 @@
-package repositories;
+package com.codeclan.example.bookingservice.repositories;
 
-import models.Pod;
+import com.codeclan.example.bookingservice.models.Pod;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
