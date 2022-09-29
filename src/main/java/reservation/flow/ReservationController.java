@@ -184,10 +184,6 @@ public class ReservationController {
             errors.reject("guests.noneExist", "There must be at least 1 guest");
             return "reservation/guests";
         }
-        if (!reservationFlow.getReservation().hasAtLeastOneAdultGuest()) {
-            errors.reject("guests.noAdults", "There must be at least 1 adult");
-            return "reservation/guests";
-        }
 
         redirectAttributes.addFlashAttribute("reservationFlow", reservationFlow);
 

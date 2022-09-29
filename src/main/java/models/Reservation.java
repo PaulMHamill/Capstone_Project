@@ -157,9 +157,6 @@ public class Reservation {
         return !guests.isEmpty();
     }
 
-    public boolean hasAtLeastOneAdultGuest() {
-        return guests.stream().anyMatch(guest -> !guest.isChild());
-    }
 
     /**
      * Calculates {@code Extra.Type} to correctly charge the food and general extras.
@@ -285,7 +282,6 @@ public class Reservation {
     public void createMealPlans() {
         mealPlans = guests.stream()
                 .map(guest -> new MealPlan(guest, this))
-                .sorted(Comparator.comparing(MealPlan::getGuest, Guest.comparator()))
                 .collect(Collectors.toList());
     }
 
