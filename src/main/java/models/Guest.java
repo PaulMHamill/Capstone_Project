@@ -1,9 +1,23 @@
 package models;
 
-public class Guest {
+import javax.persistence.*;
+import java.io.Serializable;
 
+@Entity
+@Table(name = "Guest")
+public class Guest implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "firstName")
     private String firstName;
+
+    @Column(name = "secondName")
     private String secondName;
+
+    @Column(name = "email")
     private String email;
 
     public Guest(String firstName, String secondName, String email) {
