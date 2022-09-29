@@ -28,9 +28,6 @@ public class Hotel implements Serializable {
     private Address address;
 
     @Column(nullable = false)
-    private int stars;
-
-    @Column(nullable = false)
     private String email;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
@@ -59,8 +56,8 @@ public class Hotel implements Serializable {
     private final static LocalTime DEFAULT_LATEST_CHECKOUT = LocalTime.of(22, 0);
     private final static BigDecimal DEFAULT_LATE_CHECKOUT_FEE = BigDecimal.valueOf(15.95);
 
-    public Hotel(String name, Address address, int stars, String email) {
-        this(name, address, stars, email,
+    public Hotel(String name, Address address, String email) {
+        this(name, address, email,
                 DEFAULT_EARLIEST_CHECK_IN,
                 DEFAULT_LATEST_CHECK_IN,
                 DEFAULT_STANDARD_CHECKOUT,
@@ -68,7 +65,7 @@ public class Hotel implements Serializable {
                 DEFAULT_LATE_CHECKOUT_FEE);
     }
 
-    public Hotel(String name, Address address, int stars, String email,
+    public Hotel(String name, Address address, String email,
                  LocalTime earliestCheckInTime,
                  LocalTime latestCheckInTime,
                  LocalTime standardCheckOutTime,
@@ -76,7 +73,6 @@ public class Hotel implements Serializable {
                  BigDecimal lateCheckoutFee) {
         this.name = name;
         this.address = address;
-        this.stars = stars;
         this.email = email;
         this.rooms = new HashSet<>();
         this.earliestCheckInTime = earliestCheckInTime;
@@ -116,14 +112,6 @@ public class Hotel implements Serializable {
 
     public Address getAddress() {
         return address;
-    }
-
-    public int getStars() {
-        return stars;
-    }
-
-    public void setStars(int stars) {
-        this.stars = stars;
     }
 
     public String getEmail() {
@@ -214,7 +202,6 @@ public class Hotel implements Serializable {
         return "Hotel{" +
                 "id=" + id +
                 ", address=" + address +
-                ", stars=" + stars +
                 ", email='" + email + '\'' +
                 '}';
     }

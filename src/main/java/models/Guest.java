@@ -29,12 +29,10 @@ public class Guest {
     @Column(nullable = false)
     private String lastName;
 
-    private boolean child;
 
-    public Guest(String firstName, String lastName, boolean child) {
+    public Guest(String firstName, String lastName) {
         setFirstName(firstName);
         setLastName(lastName);
-        this.child = child;
     }
 
     public Guest() {
@@ -62,14 +60,6 @@ public class Guest {
         this.lastName = lastName.toLowerCase();
     }
 
-    public boolean isChild() {
-        return child;
-    }
-
-    public void setChild(boolean child) {
-        this.child = child;
-    }
-
     public String getFormattedFullName() {
         return Utils.capitalizeWords(firstName) + " " + Utils.capitalizeWords(lastName);
     }
@@ -78,31 +68,10 @@ public class Guest {
         return tempId;
     }
 
-    /**
-     * @return A {@code Comparator} that orders adults first then by firstName then lastName.
-     */
-    public static Comparator<Guest> comparator() {
-        return Comparator.comparing(Guest::isChild, Boolean::compareTo)
-                .thenComparing(Guest::getFirstName)
-                .thenComparing(Guest::getLastName);
-    }
-
-    /**
-     * Cant use a UUID because that does not prevent a guest with the same name being added.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Guest guest = (Guest) o;
-        return child == guest.child &&
-                Objects.equals(firstName, guest.firstName) &&
-                Objects.equals(lastName, guest.lastName);
-    }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, child);
+        return Objects.hash(firstName, lastName);
     }
 
     @Override
@@ -111,7 +80,6 @@ public class Guest {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", child=" + child +
                 '}';
     }
 

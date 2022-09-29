@@ -8,13 +8,6 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Converts a String in format {@code @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)} back to a {@code LocalDateTime}.
- *
- * <blockquote>
- * <pre>
- *    {@literal @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)}
- *     private LocalDateTime createdTime;
- * </pre>
- * </blockquote>
  */
 @Component
 public class LocalDateTimeConverter implements Converter<String, LocalDateTime> {

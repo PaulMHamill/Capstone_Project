@@ -13,7 +13,6 @@ import java.util.UUID;
 
 @Entity
 public class MealPlan implements Serializable {
-    public static final double CHILD_DISCOUNT_PERCENT = 0.60;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -109,7 +108,7 @@ public class MealPlan implements Serializable {
     }
 
     /**
-     * @return The sum of calculating the total extra cost including total nights and child discounts for each extra.
+     * @return The sum of calculating the total extra cost including total nights for each extra.
      */
     public BigDecimal getTotalMealPlanCost() {
         return foodExtras.stream()
@@ -119,7 +118,7 @@ public class MealPlan implements Serializable {
 
     /**
      * @param foodExtra The food extra
-     * @return The food extra cost multiplied by total nights with child discounts applied if applicable.
+     * @return The food extra cost multiplied by total nights.
      * @throws IllegalArgumentException if Extra is not {@code Extra.Category.Food}
      */
     public BigDecimal calculateExtraCost(Extra foodExtra) throws IllegalArgumentException {
@@ -128,10 +127,6 @@ public class MealPlan implements Serializable {
         }
 
         BigDecimal total = foodExtra.getTotalPrice(reservation.getDates().totalNights());
-        if (guest.isChild()) {
-            BigDecimal discount = total.multiply(BigDecimal.valueOf(CHILD_DISCOUNT_PERCENT));
-            return total.subtract(discount);
-        }
         return total;
     }
 
