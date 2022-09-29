@@ -11,6 +11,14 @@ public class Reservation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @OneToOne
+    @JoinColumn(name = "GUEST_ID")
+    private Guest guest;
+
+    @OneToOne
+    @JoinColumn(name = "POD_ID")
+    private Pod pod_id;
+
     @Column(name = "numberOfNights")
     private int numberOfNights;
 
@@ -36,6 +44,30 @@ public class Reservation implements Serializable {
 
     public void setPod(Pod pod) {
         this.pod = pod;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Guest getGuest() {
+        return guest;
+    }
+
+    public void setGuest(Guest guest) {
+        this.guest = guest;
+    }
+
+    public Pod getPod_id() {
+        return pod_id;
+    }
+
+    public void setPod_id(Pod pod_id) {
+        this.pod_id = pod_id;
     }
 
     public double getTotalForStay() {
