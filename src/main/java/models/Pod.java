@@ -1,8 +1,22 @@
 package models;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "pod")
 public class Pod extends Unit{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column
     private String podName;
+
+    @Column
     private PodType type;
+
+    @Column
     private double nightlyRate;
 
     public Pod(String podName, PodType podType, double nightlyRate) {
