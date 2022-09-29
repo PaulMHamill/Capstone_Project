@@ -31,7 +31,7 @@ public class Reservation {
     }
 
     public Reservation createReservation(Pod pod, int numberOfNights) {
-        Reservation reservation = new Reservation(numberOfNights, Pod);
+        Reservation reservation = new Reservation(numberOfNights, pod);
         return reservation;
     }
 }
