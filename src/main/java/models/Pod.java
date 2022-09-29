@@ -1,10 +1,11 @@
 package models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "pod")
-public class Pod extends Unit{
+public class Pod extends Unit implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

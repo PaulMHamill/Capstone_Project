@@ -11,8 +11,4 @@ public class BookingserviceApplication {
 		SpringApplication.run(BookingserviceApplication.class, args);
 	}
 
-	@Bean
-	public TimeProvider timeProvider() {
-		return new TimeProvider();
-	}
 }
