@@ -1,6 +1,8 @@
 package components;
 
 import models.Guest;
+import models.Pod;
+import models.PodType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -39,6 +41,24 @@ public class DataLoader implements ApplicationRunner {
 
         Guest guest4 = new Guest("Mary", "Smith", "MS@gmail.com");
         guestRepository.save(guest4);
+
+        Pod pod1 = new Pod("Bute", PodType.DOUBLE, 400.00);
+        podRepository.save(pod1);
+
+        Pod pod2 = new Pod("Skye", PodType.DOUBLE, 400.00);
+        podRepository.save(pod2);
+
+        Pod pod3 = new Pod("Islay", PodType.DOUBLE, 400.00);
+        podRepository.save(pod3);
+
+        Pod pod4 = new Pod("Jura", PodType.DOUBLE, 400.00);
+        podRepository.save(pod4);
+
+        Pod pod5 = new Pod("Arran", PodType.DOUBLE, 400.00);
+        podRepository.save(pod5);
+
+        Pod pod6 = new Pod("Harris", PodType.DOUBLE, 400.00);
+        podRepository.save(pod6);
 
 
 
