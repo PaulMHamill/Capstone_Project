@@ -1,4 +1,4 @@
-package repositorys;
+package repositories;
 
 import models.Guest;
 import org.springframework.data.jpa.repository.JpaRepository;

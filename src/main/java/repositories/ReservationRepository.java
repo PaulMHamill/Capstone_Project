@@ -1,4 +1,4 @@
-package repositorys;
+package repositories;
 
 import models.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
