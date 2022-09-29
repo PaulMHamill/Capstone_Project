@@ -29,7 +29,16 @@ public class DataLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) throws ParseException {
 
         Guest guest1 = new Guest("Paul", "Hamill", "PH@gmail.com");
-        GuestRepository.save(Guest);
+        guestRepository.save(guest1);
+
+        Guest guest2 = new Guest("Cheryl", "Stewart", "CS@gmail.com");
+        guestRepository.save(guest2);
+
+        Guest guest3 = new Guest("John", "Smith", "JS@gmail.com");
+        guestRepository.save(guest3);
+
+        Guest guest4 = new Guest("Mary", "Smith", "MS@gmail.com");
+        guestRepository.save(guest4);
 
 
 
