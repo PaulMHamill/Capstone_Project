@@ -7,11 +7,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+import java.util.List;
+
 @RestController
 public class ReservationController {
 
     @Autowired
     ReservationRepository reservationRepository;
+
+//    @GetMapping("/reservations")
+//    public ResponseEntity<List<Reservation>> getAllReservations(@RequestParam(name = "date", required = false) Date date){
+//
+//        if (date != null){
+//            return new ResponseEntity<>(reservationRepository.findAllByDate(date), HttpStatus.OK);
+//        }
+//
+//        return new ResponseEntity<>(reservationRepository.findAll(), HttpStatus.OK);
+//    }
 
     @GetMapping("/reservations")
     public ResponseEntity<Reservation> postReservations(@RequestBody Reservation reservation) {
