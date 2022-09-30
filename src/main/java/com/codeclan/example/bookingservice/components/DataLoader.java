@@ -11,8 +11,10 @@ import org.springframework.stereotype.Component;
 import com.codeclan.example.bookingservice.repositories.GuestRepository;
 import com.codeclan.example.bookingservice.repositories.PodRepository;
 import com.codeclan.example.bookingservice.repositories.ReservationRepository;
+import java.time.LocalDate;
 
 import java.text.ParseException;
+
 
 //@Profile("!test")
 @Component
@@ -25,13 +27,14 @@ public class DataLoader implements ApplicationRunner {
     @Autowired
     ReservationRepository reservationRepository;
 
-
     public DataLoader() {
     }
 
     public void run(ApplicationArguments args) throws ParseException {
 
         System.out.println("DATA LOADER");
+
+
 
         Guest guest1 = new Guest("Paul", "Hamill", "PH@gmail.com");
         guestRepository.save(guest1);
@@ -63,11 +66,17 @@ public class DataLoader implements ApplicationRunner {
         Pod pod6 = new Pod("Harris", PodType.DOUBLE, 400.00);
         podRepository.save(pod6);
 
-        Reservation reservation1 = new Reservation(2, pod1, guest1);
+        LocalDate date = LocalDate.of(2022, 12, 8);
+        LocalDate date2 = LocalDate.of(2022, 12, 10);
+        Reservation reservation1 = new Reservation(2, pod1, guest1, date, date2);
         reservationRepository.save(reservation1);
 
-        Reservation reservation2 = new Reservation(3, pod3, guest3 );
+        LocalDate date3 = LocalDate.of(2022, 10, 8);
+        LocalDate date4 = LocalDate.of(2022, 10, 10);
+        Reservation reservation2 = new Reservation(2, pod3, guest3, date3, date4);
         reservationRepository.save(reservation2);
-        
+
+
     }
+
 }
