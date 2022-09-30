@@ -12,6 +12,9 @@ public abstract class Unit {
         this.guests = new ArrayList<Guest>();
     }
 
+    public Unit(){
+    }
+
     public int getCapacity() {
         return capacity;
     }
