@@ -27,9 +27,8 @@ public class ReservationController {
 //    }
 
     @GetMapping("/reservations")
-    public ResponseEntity<Reservation> postReservations(@RequestBody Reservation reservation) {
-        reservationRepository.save(reservation);
-        return new ResponseEntity<>(reservation, HttpStatus.CREATED);
+    public ResponseEntity <List<Reservation>> getReservations() {
+        return new ResponseEntity<>(reservationRepository.findAll(), HttpStatus.OK);
     }
 
     @PutMapping(value="/reservations/{id}")

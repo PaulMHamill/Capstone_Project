@@ -1,5 +1,8 @@
 package com.codeclan.example.bookingservice.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,6 +26,7 @@ public class Guest  {
     private String email;
 
     @OneToMany(mappedBy = "guest")
+    @JsonIgnore
     private List<Reservation> reservations;
 
     public Guest(String firstName, String secondName, String email) {
@@ -30,6 +34,9 @@ public class Guest  {
         this.secondName = secondName;
         this.email = email;
         this.reservations = new ArrayList<>();
+    }
+
+    public Guest(){
     }
 
     public String getFirstName() {

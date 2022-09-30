@@ -17,7 +17,7 @@ import java.text.ParseException;
 
 
 //@Profile("!test")
-@Component
+//@Component
 public class DataLoader implements ApplicationRunner {
 
     @Autowired
