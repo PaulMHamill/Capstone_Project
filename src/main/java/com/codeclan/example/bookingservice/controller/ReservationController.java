@@ -22,12 +22,13 @@ public class ReservationController {
     @PutMapping(value="/reservations/{id}")
     public ResponseEntity<Reservation> putReservation(@RequestBody Reservation reservation, @PathVariable Long id) {
         Reservation reservationToUpdate = reservationRepository.findById(id).get();
-        reservationToUpdate.setDate(reservation.getDate());
+        reservationToUpdate.setDateTo(reservation.getDateTo());
+        reservationToUpdate.setDateFrom(reservation.getDateFrom());
         reservationToUpdate.setPod(reservation.getPod());
         reservationToUpdate.setGuest(reservation.getGuest());
-        bookiRepository.save(bookingToUpdate);
-        return new ResponseEntity<>(bookingToUpdate, HttpStatus.OK);
+        reservationToUpdate.setNumberOfNights(reservation.getNumberOfNights());
+        reservationRepository.save(reservationToUpdate);
+        return new ResponseEntity<>(reservationToUpdate, HttpStatus.OK);
     }
 
-    }
 }
