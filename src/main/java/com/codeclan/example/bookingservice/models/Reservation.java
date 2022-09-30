@@ -2,6 +2,7 @@ package com.codeclan.example.bookingservice.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "reservations")
@@ -22,14 +23,25 @@ public class Reservation implements Serializable {
     @Column(name = "numberOfNights")
     private int numberOfNights;
 
+    @Column(name = "date_from")
+    private LocalDate dateFrom;
+
+    @Column(name = "date_to")
+    private LocalDate dateTo;
+
+    @Column(name = "total_price")
+    private double totalPrice;
+
     public Reservation() {
     }
 
 
-    public Reservation(int numberOfNights, Pod pod, Guest guest) {
+    public Reservation(int numberOfNights, Pod pod, Guest guest, LocalDate dateFrom, LocalDate dateTo) {
         this.numberOfNights = numberOfNights;
         this.pod = pod;
         this.guest = guest;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
     }
 
     public int getNumberOfNights() {

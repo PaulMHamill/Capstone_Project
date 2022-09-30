@@ -68,8 +68,6 @@ public class DataLoader implements ApplicationRunner {
 
         Reservation reservation2 = new Reservation(3, pod3, guest3 );
         reservationRepository.save(reservation2);
-
-
-
+        
     }
 }
