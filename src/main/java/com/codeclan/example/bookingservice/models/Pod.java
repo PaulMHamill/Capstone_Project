@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "pods")
-public class Pod extends Unit {
+public class Pod {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,13 +75,13 @@ public class Pod extends Unit {
         this.reservations = reservations;
     }
 
-    public boolean isOccupied() {
-        return this.guestListSize() > 0;
-    }
-
-    public boolean isVacant() {
-        return this.guestListSize() == 0;
-    }
+//    public boolean isOccupied() {
+//        return this.guestListSize() > 0;
+//    }
+//
+//    public boolean isVacant() {
+//        return this.guestListSize() == 0;
+//    }
 
     public void setNightlyRate(double nightlyRate) {
         this.nightlyRate = nightlyRate;
