@@ -6,6 +6,7 @@ import com.codeclan.example.bookingservice.models.Pod;
 import com.codeclan.example.bookingservice.models.Reservation;
 import com.codeclan.example.bookingservice.repositories.PodRepository;
 import com.codeclan.example.bookingservice.repositories.ReservationRepository;
+import com.codeclan.example.bookingservice.reservationprocess.ReservationDates;
 import com.codeclan.example.bookingservice.reservationprocess.ReservationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -68,7 +69,7 @@ public class ReservationController {
         return new ReservationForm();
     }
 
-    // Form step 1
+    // Form step 0
 
     /**
      * Entry point to begin the reservation flow.
@@ -110,7 +111,7 @@ public class ReservationController {
         }
 
         reservationForm.completeStep(ReservationForm.Step.Dates);
-        redirectAttributes.addFlashAttribute("reservationFlow", reservationForm);
+        redirectAttributes.addFlashAttribute("reservationForm", reservationForm);
         return "redirect:/reservation/guests";
     }
 
@@ -128,10 +129,10 @@ public class ReservationController {
         return "reservation/fragments :: podCosts";
     }
 
-    // Form step 2
+    // Form step 1
 
     @GetMapping("/reservation/guests")
-    public String getGuestForm(@ModelAttribute("reservationFlow") ReservationForm reservationForm, Model model) {
+    public String getGuestForm(@ModelAttribute("reservationForm") ReservationForm reservationForm, Model model) {
         reservationForm.enterStep(ReservationForm.Step.Guests);
         model.addAttribute("guest", new Guest());
         return "reservation/guests";
@@ -176,7 +177,7 @@ public class ReservationController {
 
     @PostMapping(value = "/reservation/guests", params = "removeGuest")
     public String postRemoveGuest(@RequestParam("removeGuest") UUID guestId,
-                                  @ModelAttribute("reservationFlow") ReservationForm reservationFlow,
+                                  @ModelAttribute("reservationForm") ReservationForm reservationForm,
                                   Model model) {
         reservationForm.enterStep(ReservationForm.Step.Guests);
         reservationForm.getReservation().removeGuestById(guestId);
@@ -207,7 +208,7 @@ public class ReservationController {
     }
 
 
-    // Form step 3 - review
+    // Form step 2 - review
 
 
     @GetMapping("/reservation/review")
@@ -235,7 +236,7 @@ public class ReservationController {
     }
 
 
-    // Form step 4 - payment
+    // Form step 3 - payment
 
     @GetMapping("/reservation/payment")
     public String getPayment(@ModelAttribute("reservationForm") ReservationForm reservationForm,
