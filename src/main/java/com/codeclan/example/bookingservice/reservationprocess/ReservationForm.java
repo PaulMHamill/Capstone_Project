@@ -47,13 +47,11 @@ public class ReservationForm {
 
     private Step activeStep = Step.Dates;
 
-    public ReservationFlow() {
+    public ReservationForm() {
         stepDescriptions.add(new StepDescription(0, "Dates", "Choose your reservation dates"));
         stepDescriptions.add(new StepDescription(1, "Guests", "Provide guest details"));
-        stepDescriptions.add(new StepDescription(2, "Extras", "Select optional extras"));
-        stepDescriptions.add(new StepDescription(3, "Meals", "Choose optional meal plans"));
-        stepDescriptions.add(new StepDescription(4, "Review", "Verify your reservation"));
-        stepDescriptions.add(new StepDescription(5, "Payment", "Provide payment details"));
+        stepDescriptions.add(new StepDescription(2, "Review", "Verify your reservation"));
+        stepDescriptions.add(new StepDescription(3, "Payment", "Provide payment details"));
     }
 
     public Reservation getReservation() {
@@ -73,7 +71,7 @@ public class ReservationForm {
     }
 
     public StepDescription getActiveStepDescription() {
-        return stepDescriptions.get(activeStep.flowStep);
+        return stepDescriptions.get(activeStep.reservationProcess);
     }
 
     public void completeStep(Step step) {
