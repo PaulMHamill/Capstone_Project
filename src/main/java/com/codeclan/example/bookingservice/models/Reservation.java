@@ -1,10 +1,12 @@
 package com.codeclan.example.bookingservice.models;
 
+import com.codeclan.example.bookingservice.reservationprocess.CompletedPayment;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "reservations")
@@ -33,6 +35,16 @@ public class Reservation {
 
     @Column(name = "total_price")
     private double totalPrice;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private CompletedPayment completedPayment;
+
+    @Column(nullable = false)
+    private LocalDateTime createdTime;
+
+    public LocalDateTime getCreatedTime() {
+        return createdTime;
+    }
 
     public Reservation() {
     }
@@ -105,6 +117,20 @@ public class Reservation {
     public double getTotalForStay() {
         return this.numberOfNights * this.pod.getNightlyRate();
     }
+
+    public CompletedPayment getCompletedPayment() {
+        return completedPayment;
+    }
+
+    public void setCompletedPayment(CompletedPayment completedPayment) {
+        createdTime = LocalDateTime.now();
+        this.completedPayment = completedPayment;
+    }
+
+    public void setCreatedTime(LocalDateTime createdTime) {
+        this.createdTime = createdTime;
+    }
+
 
 //    public Reservation createReservation(Pod pod, int numberOfNights, Guest guest) {
 //        Reservation reservation = new Reservation(numberOfNights, pod);
