@@ -23,6 +23,8 @@ public class Guest  {
     @Column(name = "firstName")
     private String firstName;
 
+    @Size(min = 2, max = 20)
+    @NotNull(message = "required")
     @Column(name = "secondName")
     private String secondName;
 
