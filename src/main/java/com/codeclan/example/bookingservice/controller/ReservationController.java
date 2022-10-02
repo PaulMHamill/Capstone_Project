@@ -1,6 +1,7 @@
 package com.codeclan.example.bookingservice.controller;
 
 import com.codeclan.example.bookingservice.models.Guest;
+import com.codeclan.example.bookingservice.models.NotFoundException;
 import com.codeclan.example.bookingservice.models.Pod;
 import com.codeclan.example.bookingservice.models.Reservation;
 import com.codeclan.example.bookingservice.repositories.PodRepository;
