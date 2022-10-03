@@ -68,12 +68,12 @@ public class DataLoader implements ApplicationRunner {
 
         LocalDate date = LocalDate.of(2022, 12, 8);
         LocalDate date2 = LocalDate.of(2022, 12, 10);
-        Reservation reservation1 = new Reservation(2, pod1, guest1, date, date2);
+        Reservation reservation1 = new Reservation( pod1, guest1, date, date2);
         reservationRepository.save(reservation1);
 
         LocalDate date3 = LocalDate.of(2022, 10, 8);
         LocalDate date4 = LocalDate.of(2022, 10, 10);
-        Reservation reservation2 = new Reservation(2, pod3, guest3, date3, date4);
+        Reservation reservation2 = new Reservation( pod3, guest3, date3, date4);
         reservationRepository.save(reservation2);
 
 

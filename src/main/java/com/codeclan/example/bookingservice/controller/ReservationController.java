@@ -76,7 +76,7 @@ public class ReservationController {
     // Form step 0
 
     /**
-     * Entry point to begin the reservation flow.
+     * Entry point to begin the reservation process.
      */
     @GetMapping("/reservation")
     public String getDateForm(@RequestParam(value = "podId") Long podId,
