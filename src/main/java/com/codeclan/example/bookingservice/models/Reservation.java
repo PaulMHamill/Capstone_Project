@@ -6,11 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "reservations")
@@ -46,13 +44,9 @@ public class Reservation {
     @Column(nullable = false)
     private LocalDateTime createdTime;
 
-    public LocalDateTime getCreatedTime() {
-        return createdTime;
-    }
-
     @Embedded
     @Valid
-    private ReservationDates dates = new ReservationDates();
+    private ReservationDates reservationDates;
 
     public Reservation() {
     }
@@ -62,8 +56,8 @@ public class Reservation {
         this.numberOfNights = numberOfNights;
         this.pod = pod;
         this.guest = guest;
-        this.dateFrom = dateFrom;
-        this.dateTo = dateTo;
+        this.createdTime = LocalDateTime.now();
+        this.reservationDates = new ReservationDates(dateFrom, dateTo);
     }
 
     public int getNumberOfNights() {
@@ -135,17 +129,20 @@ public class Reservation {
         this.completedPayment = completedPayment;
     }
 
+    public LocalDateTime getCreatedTime() {
+        return createdTime;
+    }
     public void setCreatedTime(LocalDateTime createdTime) {
         this.createdTime = createdTime;
     }
 
 
     public ReservationDates getDates() {
-        return dates;
+        return reservationDates;
     }
 
     public void setDates(ReservationDates dates) {
-        this.dates = dates;
+        this.reservationDates = dates;
     }
 
 //    public void clearGuests() {
