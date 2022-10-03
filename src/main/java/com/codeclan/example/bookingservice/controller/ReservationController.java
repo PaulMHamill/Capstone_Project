@@ -50,17 +50,17 @@ public class ReservationController {
         return new ResponseEntity<>(reservationRepository.findAll(), HttpStatus.OK);
     }
 
-    @PutMapping(value="/reservations/{id}")
-    public ResponseEntity<Reservation> putReservation(@RequestBody Reservation reservation, @PathVariable Long id) {
-        Reservation reservationToUpdate = reservationRepository.findById(id).get();
-        reservationToUpdate.setDateTo(reservation.getDateTo());
-        reservationToUpdate.setDateFrom(reservation.getDateFrom());
-        reservationToUpdate.setPod(reservation.getPod());
-        reservationToUpdate.setGuest(reservation.getGuest());
-        reservationToUpdate.setNumberOfNights(reservation.getNumberOfNights());
-        reservationRepository.save(reservationToUpdate);
-        return new ResponseEntity<>(reservationToUpdate, HttpStatus.OK);
-    }
+//    @PutMapping(value="/reservations/{id}")
+//    public ResponseEntity<Reservation> putReservation(@RequestBody Reservation reservation, @PathVariable Long id) {
+//        Reservation reservationToUpdate = reservationRepository.findById(id).get();
+//        reservationToUpdate.setDateTo(reservation.getDateTo());
+//        reservationToUpdate.setDateFrom(reservation.getDateFrom());
+//        reservationToUpdate.setPod(reservation.getPod());
+//        reservationToUpdate.setGuest(reservation.getGuest());
+//        reservationToUpdate.setNumberOfNights(reservation.getNumberOfNights());
+//        reservationRepository.save(reservationToUpdate);
+//        return new ResponseEntity<>(reservationToUpdate, HttpStatus.OK);
+//    }
 
     @DeleteMapping(value="/reservations/{id}")
     public ResponseEntity<Long> deleteReservation(@PathVariable Long id){

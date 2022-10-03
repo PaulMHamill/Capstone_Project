@@ -29,11 +29,11 @@ public class Reservation {
     @Column(name = "numberOfNights")
     private int numberOfNights;
 
-    @Column(name = "date_from")
-    private LocalDate dateFrom;
-
-    @Column(name = "date_to")
-    private LocalDate dateTo;
+//    @Column(name = "date_from")
+//    private LocalDate dateFrom;
+//
+//    @Column(name = "date_to")
+//    private LocalDate dateTo;
 
     @Column(name = "total_price")
     private double totalPrice;
@@ -92,21 +92,21 @@ public class Reservation {
         this.guest = guest;
     }
 
-    public LocalDate getDateFrom() {
-        return dateFrom;
-    }
-
-    public void setDateFrom(LocalDate dateFrom) {
-        this.dateFrom = dateFrom;
-    }
-
-    public LocalDate getDateTo() {
-        return dateTo;
-    }
-
-    public void setDateTo(LocalDate dateTo) {
-        this.dateTo = dateTo;
-    }
+//    public LocalDate getDateFrom() {
+//        return dateFrom;
+//    }
+//
+//    public void setDateFrom(LocalDate dateFrom) {
+//        this.dateFrom = dateFrom;
+//    }
+//
+//    public LocalDate getDateTo() {
+//        return dateTo;
+//    }
+//
+//    public void setDateTo(LocalDate dateTo) {
+//        this.dateTo = dateTo;
+//    }
 
     public double getTotalPrice() {
         return totalPrice;
@@ -117,7 +117,7 @@ public class Reservation {
     }
 
     public double getTotalForStay() {
-        return this.numberOfNights * this.pod.getNightlyRate();
+        return this.reservationDates.totalNights() * this.pod.getNightlyRate();
     }
 
     public CompletedPayment getCompletedPayment() {
