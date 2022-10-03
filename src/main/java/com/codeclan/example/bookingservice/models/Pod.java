@@ -6,11 +6,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "pods")
-public class Pod {
+public class Pod extends Unit{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,12 +77,18 @@ public class Pod {
         this.reservations = reservations;
     }
 
-//    public boolean isOccupied() {
-//        return this.guestListSize() > 0;
-//    }
-//
-//    public boolean isVacant() {
-//        return this.guestListSize() == 0;
+    public boolean isOccupied() {
+        return this.guestListSize() > 0;
+    }
+
+    public boolean isVacant() {
+        return this.guestListSize() == 0;
+    }
+
+//    public void addGuest(Guest guest) {
+//        if (!isOccupied()) {
+//            guest.add(guest);
+//        }
 //    }
 
     public void setNightlyRate(double nightlyRate) {

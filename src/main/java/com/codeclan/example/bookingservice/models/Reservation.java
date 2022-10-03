@@ -1,12 +1,16 @@
 package com.codeclan.example.bookingservice.models;
 
 import com.codeclan.example.bookingservice.reservationprocess.CompletedPayment;
+import com.codeclan.example.bookingservice.reservationprocess.ReservationDates;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Set;
 
 @Entity
 @Table(name = "reservations")
@@ -45,6 +49,10 @@ public class Reservation {
     public LocalDateTime getCreatedTime() {
         return createdTime;
     }
+
+    @Embedded
+    @Valid
+    private ReservationDates dates = new ReservationDates();
 
     public Reservation() {
     }
@@ -130,6 +138,18 @@ public class Reservation {
     public void setCreatedTime(LocalDateTime createdTime) {
         this.createdTime = createdTime;
     }
+
+
+    public ReservationDates getDates() {
+        return dates;
+    }
+
+    public void setDates(ReservationDates dates) {
+        this.dates = dates;
+    }
+
+//    public void clearGuests() {
+//        guests.clear();
 
 
 //    public Reservation createReservation(Pod pod, int numberOfNights, Guest guest) {

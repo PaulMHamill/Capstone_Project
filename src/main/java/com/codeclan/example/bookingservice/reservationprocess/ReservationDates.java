@@ -23,29 +23,13 @@ public class ReservationDates {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate checkOutDate;
 
-    @Column(nullable = false)
-    @NotNull(message = "Estimated check in time required")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-    private LocalTime estimatedCheckInTime;
-
-    @Column(nullable = false)
-    private boolean lateCheckout = false;
-
-    @Column(nullable = false)
-    @AssertTrue(message = "Please acknowledge policy")
-    private boolean policyAcknowledged = false;
 
     public ReservationDates() {
     }
 
-    public ReservationDates(LocalDate checkInDate, LocalDate checkOutDate,
-                            LocalTime estimatedCheckInTime, boolean lateCheckout,
-                            boolean policyAcknowledged) {
+    public ReservationDates(LocalDate checkInDate, LocalDate checkOutDate) {
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
-        this.estimatedCheckInTime = estimatedCheckInTime;
-        this.lateCheckout = lateCheckout;
-        this.policyAcknowledged = policyAcknowledged;
     }
 
     public LocalDate getCheckInDate() {
@@ -64,35 +48,6 @@ public class ReservationDates {
         this.checkOutDate = checkOutDate;
     }
 
-    public LocalTime getEstimatedCheckInTime() {
-        return estimatedCheckInTime;
-    }
-
-    public void setEstimatedCheckInTime(LocalTime estimatedCheckInTime) {
-        this.estimatedCheckInTime = estimatedCheckInTime;
-    }
-
-    /**
-     * @return {@code true} if the late checkout option is selected
-     */
-    public boolean isLateCheckout() {
-        return lateCheckout;
-    }
-
-    public void setLateCheckout(boolean lateCheckout) {
-        this.lateCheckout = lateCheckout;
-    }
-
-    /**
-     * @return {@code true} if check out terms and conditions have been accepted.
-     */
-    public boolean isPolicyAcknowledged() {
-        return policyAcknowledged;
-    }
-
-    public void setPolicyAcknowledged(boolean policyAcknowledged) {
-        this.policyAcknowledged = policyAcknowledged;
-    }
 
     public long totalNights() {
         if (checkInDate == null || checkOutDate == null) {
@@ -140,9 +95,6 @@ public class ReservationDates {
         return "ReservationDates{" +
                 "checkInDate=" + checkInDate +
                 ", checkOutDate=" + checkOutDate +
-                ", estimatedCheckInTime=" + estimatedCheckInTime +
-                ", lateCheckout=" + lateCheckout +
-                ", policyAcknowledged=" + policyAcknowledged +
                 '}';
     }
 }

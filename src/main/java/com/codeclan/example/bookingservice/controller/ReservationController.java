@@ -1,11 +1,13 @@
 package com.codeclan.example.bookingservice.controller;
 
+import com.codeclan.example.bookingservice.TimeProvider;
 import com.codeclan.example.bookingservice.models.Guest;
 import com.codeclan.example.bookingservice.models.NotFoundException;
 import com.codeclan.example.bookingservice.models.Pod;
 import com.codeclan.example.bookingservice.models.Reservation;
 import com.codeclan.example.bookingservice.repositories.PodRepository;
 import com.codeclan.example.bookingservice.repositories.ReservationRepository;
+import com.codeclan.example.bookingservice.reservationprocess.PendingPayment;
 import com.codeclan.example.bookingservice.reservationprocess.ReservationDates;
 import com.codeclan.example.bookingservice.reservationprocess.ReservationForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ public class ReservationController {
 
     @Autowired
     PodRepository podRepository;
+
+    private TimeProvider timeProvider;
 
 //    @GetMapping("/reservations")
 //    public ResponseEntity<List<Reservation>> getAllReservations(@RequestParam(name = "date", required = false) Date date){
@@ -85,7 +89,7 @@ public class ReservationController {
             throw new NotFoundException();
         }
 
-        maybePod.get().setReservation(reservationForm.getReservation());
+//        maybePod.get().setReservation(reservationForm.getReservation());
 
         return "reservation/dates";
     }
@@ -157,30 +161,30 @@ public class ReservationController {
             return "reservation/guests";
         }
 
-        if (reservationForm.getReservation().getGuests().contains(guest)) {
-            bindingResult.reject("exists", "A guest with this name already exists");
-            return "reservation/guests";
-        }
+//        if (reservationForm.getReservation().getGuests().contains(guest)) {
+//            bindingResult.reject("exists", "A guest with this name already exists");
+//            return "reservation/guests";
+//        }
+//
+//        if (reservationForm.getReservation().isOccuipied()) {
+//            bindingResult.reject("guestLimitExceeded", "This pod has the maximum number of guests");
+//            return "reservation/guests";
+//        }
+//
+//        reservationForm.getReservation().addGuest(guest);
 
-        if (reservationForm.getReservation().isPodFull()) {
-            bindingResult.reject("guestLimitExceeded", "This pod has the maximum number of guests");
-            return "reservation/guests";
-        }
 
-        reservationForm.getReservation().addGuest(guest);
-
-        // create a new guest to rebind to the guest form
         model.addAttribute("guest", new Guest());
 
         return "reservation/guests";
     }
 
     @PostMapping(value = "/reservation/guests", params = "removeGuest")
-    public String postRemoveGuest(@RequestParam("removeGuest") UUID guestId,
+    public String postRemoveGuest(@RequestParam("removeGuest") Guest guestId,
                                   @ModelAttribute("reservationForm") ReservationForm reservationForm,
                                   Model model) {
         reservationForm.enterStep(ReservationForm.Step.Guests);
-        reservationForm.getReservation().removeGuestById(guestId);
+//        reservationForm.getReservation().removeGuestById(guestId);
         model.addAttribute("guest", new Guest());
         return "reservation/guests";
     }
@@ -192,19 +196,15 @@ public class ReservationController {
                                     RedirectAttributes redirectAttributes) {
         reservationForm.enterStep(ReservationForm.Step.Guests);
 
-        if (!reservationForm.getReservation().hasGuests()) {
+        if (!reservationForm.getReservation().getPod().isOccupied()) {
             errors.reject("guests.noneExist", "There must be at least 1 guest");
-            return "reservation/guests";
-        }
-        if (!reservationForm.getReservation().hasAtLeastOneAdultGuest()) {
-            errors.reject("guests.noAdults", "There must be at least 1 adult");
             return "reservation/guests";
         }
 
         redirectAttributes.addFlashAttribute("reservationForm", reservationForm);
 
         reservationForm.completeStep(ReservationForm.Step.Guests);
-        return "redirect:/reservation/extras";
+        return "redirect:/reservation/review";
     }
 
 

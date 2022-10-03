@@ -100,18 +100,18 @@ public class ReservationForm {
     }
 
     public static class StepDescription {
-        private int flowStep;
+        private int formStep;
         private String title;
         private String description;
 
-        public StepDescription(int flowStep, String title, String description) {
-            this.flowStep = flowStep;
+        public StepDescription(int formStep, String title, String description) {
+            this.formStep = formStep;
             this.title = title;
             this.description = description;
         }
 
-        public int getFlowStep() {
-            return flowStep;
+        public int getFormStep() {
+            return formStep;
         }
 
         public String getTitle() {
@@ -122,22 +122,22 @@ public class ReservationForm {
             return description;
         }
 
-        private int normalizedFlowStep() {
-            return flowStep + 1;
+        private int normalizedFormStep() {
+            return formStep + 1;
         }
 
-        public String getFlowStepWithTitle() {
-            return normalizedFlowStep() + ". " + title;
+        public String getFormStepWithTitle() {
+            return normalizedFormStep() + ". " + title;
         }
 
-        public String getFlowStepWithDescription() {
-            return normalizedFlowStep() + ". " + description;
+        public String getFormStepWithDescription() {
+            return normalizedFormStep() + ". " + description;
         }
 
         @Override
         public String toString() {
             return "StepDescription{" +
-                    "flowStep=" + flowStep +
+                    "formStep=" + formStep +
                     ", title='" + title + '\'' +
                     ", description='" + description + '\'' +
                     '}';
