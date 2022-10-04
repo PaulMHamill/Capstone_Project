@@ -46,7 +46,7 @@ public class ReservationController {
     }
 
     @PostMapping(value = "/reservations")
-    public ResponseEntity<Reservation> createRaid(@RequestBody Reservation reservation){
+    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation){
         reservationRepository.save(reservation);
         return new ResponseEntity<>(reservation, HttpStatus.CREATED);
     }
