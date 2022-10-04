@@ -47,13 +47,13 @@ public class Reservation {
     @Column(nullable = false)
     private LocalDateTime createdTime;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "reservation_guests",
-            joinColumns = @JoinColumn(name = "reservation_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "guest_id", referencedColumnName = "id")
-    )
-    private Set<Guest> guests = new HashSet<>();
+//    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinTable(
+//            name = "reservation_guests",
+//            joinColumns = @JoinColumn(name = "reservation_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "guest_id", referencedColumnName = "id")
+//    )
+//    private Set<Guest> guests = new HashSet<>();
 
     @Embedded
     @Valid

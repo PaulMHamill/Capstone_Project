@@ -5,9 +5,6 @@ import java.time.YearMonth;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * Only a successful PendingPayment will result in a CompletedPayment which eliminates the need to do validation twice.
- */
 @Entity
 public class CompletedPayment {
     @Id

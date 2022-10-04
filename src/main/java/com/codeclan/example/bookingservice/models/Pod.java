@@ -95,6 +95,4 @@ public class Pod {
         this.nightlyRate = nightlyRate;
     }
 
-    public void setReservation(Reservation reservation) {
-    }
 }
