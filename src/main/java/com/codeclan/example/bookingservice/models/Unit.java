@@ -2,7 +2,7 @@ package com.codeclan.example.bookingservice.models;
 
 import java.util.ArrayList;
 
-public abstract class Unit {
+public class Unit {
 
     private int capacity;
     private ArrayList<Guest> guests;

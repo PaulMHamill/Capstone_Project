@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "pods")
-public class Pod extends Unit{
+public class Pod {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -80,18 +80,21 @@ public class Pod extends Unit{
 //    public boolean isOccupied() {
 //        return this.guestListSize() > 0;
 //    }
-
+//
 //    public boolean isVacant() {
 //        return this.guestListSize() == 0;
 //    }
 //
 //    public void addGuest(Guest guest) {
 //        if (!isOccupied()) {
-//            guest.add(guest);
+//            this.guests.add(guest);
 //        }
 //    }
 
     public void setNightlyRate(double nightlyRate) {
         this.nightlyRate = nightlyRate;
+    }
+
+    public void setReservation(Reservation reservation) {
     }
 }

@@ -68,69 +68,68 @@ public class ReservationController {
 //        return new ResponseEntity<>(id, HttpStatus.OK);
 //    }
 //
-//    @ModelAttribute("reservationProcess")
-//    public ReservationForm getReservationForm() {
-//        return new ReservationForm();
-//    }
-//
-//    // Form step 0
-//
-//    /**
-//     * Entry point to begin the reservation process.
-//     */
-//    @GetMapping("/reservation")
-//    public String getDateForm(@RequestParam(value = "podId") Long podId,
-//                              @ModelAttribute("reservationForm") ReservationForm reservationForm)
-//            throws NotFoundException {
-//        reservationForm.enterStep(ReservationForm.Step.Dates);
-//
-//        Optional<Pod> maybePod = podRepository.findById(podId);
-//        if (!maybePod.isPresent()) {
-//            throw new NotFoundException();
-//        }
-//
-////        maybePod.get().setReservation(reservationForm.getReservation());
-//
-//        return "reservation/dates";
-//    }
-//
-//    @PostMapping("/reservation/dates")
-//    public String dates(@Valid @ModelAttribute("reservationForm") ReservationForm reservationForm,
-//                        BindingResult bindingResult,
-//                        RedirectAttributes redirectAttributes) {
-//        reservationForm.enterStep(ReservationForm.Step.Dates);
-//
-//        if (bindingResult.hasErrors()) {
-//            return "reservation/dates";
-//        }
-//
-//        Optional<ReservationDates.ValidationError> validationError =
-//                reservationForm.getReservation().getDates().validate(timeProvider.localDate());
-//
-//        if (validationError.isPresent()) {
-//            // Must be a field rejection as the dates form is bound to the property path reservation.dates.
-//            bindingResult.rejectValue("reservation.dates", validationError.get().getCode(),
-//                    validationError.get().getReason());
-//            return "reservation/dates";
-//        }
-//
-//        reservationForm.completeStep(ReservationForm.Step.Dates);
-//        redirectAttributes.addFlashAttribute("reservationForm", reservationForm);
-//        return "redirect:/reservation/guests";
-//    }
-//
-//    @PostMapping(value = "/reservation/dates", params = "cancel")
-//    public String cancelDates(SessionStatus sessionStatus) {
-//        sessionStatus.setComplete();
-//        return "redirect:/";
-//    }
-//
-//     // No need to validate since errors are implied through a negative total night duration which simplifies the logic.
-//
-//    @PostMapping(value = "/reservation/dates", params = "prices")
-//    public String roomCostFragment(@ModelAttribute("reservationForm") ReservationForm reservationForm) {
-//        return "reservation/fragments :: podCosts";
-//    }
+    @ModelAttribute("reservationProcess")
+    public ReservationForm getReservationForm() {
+        return new ReservationForm();
+    }
+
+    // Form step 0
+
+     // Entry point to begin the reservation process.
+
+    @GetMapping("/reservation")
+    public String getDateForm(@RequestParam(value = "podId") Long podId,
+                              @ModelAttribute("reservationForm") ReservationForm reservationForm)
+            throws NotFoundException {
+        reservationForm.enterStep(ReservationForm.Step.Dates);
+
+        Optional<Pod> maybePod = podRepository.findById(podId);
+        if (!maybePod.isPresent()) {
+            throw new NotFoundException();
+        }
+
+        maybePod.get().setReservation(reservationForm.getReservation());
+
+        return "reservation/dates";
+    }
+
+    @PostMapping("/reservation/dates")
+    public String dates(@Valid @ModelAttribute("reservationForm") ReservationForm reservationForm,
+                        BindingResult bindingResult,
+                        RedirectAttributes redirectAttributes) {
+        reservationForm.enterStep(ReservationForm.Step.Dates);
+
+        if (bindingResult.hasErrors()) {
+            return "reservation/dates";
+        }
+
+        Optional<ReservationDates.ValidationError> validationError =
+                reservationForm.getReservation().getDates().validate(timeProvider.localDate());
+
+        if (validationError.isPresent()) {
+            // Must be a field rejection as the dates form is bound to the property path reservation.dates.
+            bindingResult.rejectValue("reservation.dates", validationError.get().getCode(),
+                    validationError.get().getReason());
+            return "reservation/dates";
+        }
+
+        reservationForm.completeStep(ReservationForm.Step.Dates);
+        redirectAttributes.addFlashAttribute("reservationForm", reservationForm);
+        return "redirect:/reservation/guests";
+    }
+
+    @PostMapping(value = "/reservation/dates", params = "cancel")
+    public String cancelDates(SessionStatus sessionStatus) {
+        sessionStatus.setComplete();
+        return "redirect:/";
+    }
+
+     // No need to validate since errors are implied through a negative total night duration which simplifies the logic.
+
+    @PostMapping(value = "/reservation/dates", params = "prices")
+    public String roomCostFragment(@ModelAttribute("reservationForm") ReservationForm reservationForm) {
+        return "reservation/fragments :: podCosts";
+    }
 //
 //    // Form step 1
 //
@@ -280,14 +279,14 @@ public class ReservationController {
 //        return "redirect:/reservation/completed";
 //    }
 //
-//    // End form
-//
-//    @GetMapping("/reservation/completed")
-//    public String getFormCompleted() {
-//        return "reservation/completed";
+    // End form
+
+    @GetMapping("/reservation/completed")
+    public String getFormCompleted() {
+        return "reservation/completed";
 //    }
 
 
+    }}
 
 
-}
