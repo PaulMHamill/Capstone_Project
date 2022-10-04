@@ -29,4 +29,22 @@ public class PodController {
         podRepository.save(pod);
         return new ResponseEntity<>(pod, HttpStatus.CREATED);
     }
+
+    @PutMapping(value="/pods/{id}")
+    public ResponseEntity<Pod> putPod(@RequestBody Pod pod, @PathVariable Long id){
+        Pod podToUpdate = podRepository.findById(id).get();
+        podToUpdate.setPodName(pod.getPodName());
+        podToUpdate.setReservations(pod.getReservations());
+        podToUpdate.setType(pod.getType());
+        podToUpdate.setNightlyRate(pod.getNightlyRate());
+        podRepository.save(podToUpdate);
+        return new ResponseEntity<>(podToUpdate, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value="/pods/{id}")
+    public ResponseEntity<Long> deletePod(@PathVariable Long id){
+        podRepository.deleteById(id);
+        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
 }
