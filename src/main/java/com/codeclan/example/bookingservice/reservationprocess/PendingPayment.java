@@ -59,9 +59,8 @@ public class PendingPayment {
         }
     }
 
-    /**
-     * @param createdTime Used as a reference point to generate valid credit card expiry dates.
-     */
+     // createdTime Used as a reference point to generate valid credit card expiry dates.
+
     public PendingPayment(LocalDateTime createdTime) {
         this.createdTime = createdTime;
     }
@@ -126,9 +125,9 @@ public class PendingPayment {
         this.createdTime = createdTime;
     }
 
-    /**
-     * @return 10 years including the year this payment was createdTime in.
-     */
+
+     // @return 10 years including the year this payment was createdTime in.
+
     public List<Year> validExpiryYears() {
         Year currentYearNow = Year.of(createdTime.getYear());
 
@@ -137,9 +136,9 @@ public class PendingPayment {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * @return All months starting from the month this payment was createdTime in.
-     */
+
+     // @return All months starting from the month this payment was createdTime in.
+
     public List<Month> validExpiryMonths() {
         Month currentMonthNow = createdTime.getMonth();
         return Arrays.stream(Month.values())

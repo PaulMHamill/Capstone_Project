@@ -84,4 +84,5 @@ public class Guest  {
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
     }
+
 }

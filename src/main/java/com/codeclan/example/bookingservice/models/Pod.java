@@ -77,14 +77,14 @@ public class Pod extends Unit{
         this.reservations = reservations;
     }
 
-    public boolean isOccupied() {
-        return this.guestListSize() > 0;
-    }
+//    public boolean isOccupied() {
+//        return this.guestListSize() > 0;
+//    }
 
-    public boolean isVacant() {
-        return this.guestListSize() == 0;
-    }
-
+//    public boolean isVacant() {
+//        return this.guestListSize() == 0;
+//    }
+//
 //    public void addGuest(Guest guest) {
 //        if (!isOccupied()) {
 //            guest.add(guest);
