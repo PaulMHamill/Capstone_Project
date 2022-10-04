@@ -33,40 +33,24 @@ public class ReservationController {
     @Autowired
     PodRepository podRepository;
 
-    private TimeProvider timeProvider;
-
-//    @GetMapping("/reservations")
-//    public ResponseEntity<List<Reservation>> getAllReservations(@RequestParam(name = "date", required = false) Date date){
-//
-//        if (date != null){
-//            return new ResponseEntity<>(reservationRepository.findAllByDate(date), HttpStatus.OK);
-//        }
-//
-//        return new ResponseEntity<>(reservationRepository.findAll(), HttpStatus.OK);
-//    }
+//    private TimeProvider timeProvider;
 
     @GetMapping("/reservations")
     public ResponseEntity <List<Reservation>> getReservations() {
         return new ResponseEntity<>(reservationRepository.findAll(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/findReservationGuest/{guestID}", method = RequestMethod.GET)
-    private List<Reservation> findBookingUser(@PathVariable("guestID") Guest guest) {
-        return reservationRepository.findReservationGuest(guest);
+    @GetMapping(value = "/reservations/{id}")
+    public ResponseEntity getReservation(@PathVariable Long id){
+        return new ResponseEntity<>(reservationRepository.findById(id), HttpStatus.OK);
     }
 
-//    @PutMapping(value="/reservations/{id}")
-//    public ResponseEntity<Reservation> putReservation(@RequestBody Reservation reservation, @PathVariable Long id) {
-//        Reservation reservationToUpdate = reservationRepository.findById(id).get();
-//        reservationToUpdate.setDateTo(reservation.getDateTo());
-//        reservationToUpdate.setDateFrom(reservation.getDateFrom());
-//        reservationToUpdate.setPod(reservation.getPod());
-//        reservationToUpdate.setGuest(reservation.getGuest());
-//        reservationToUpdate.setNumberOfNights(reservation.getNumberOfNights());
-//        reservationRepository.save(reservationToUpdate);
-//        return new ResponseEntity<>(reservationToUpdate, HttpStatus.OK);
-//    }
-//
+    @PostMapping(value = "/reservations")
+    public ResponseEntity<Reservation> createRaid(@RequestBody Reservation reservation){
+        reservationRepository.save(reservation);
+        return new ResponseEntity<>(reservation, HttpStatus.CREATED);
+    }
+
     @DeleteMapping(value="/reservations/{id}")
     public ResponseEntity<Long> deleteReservation(@PathVariable Long id){
         reservationRepository.deleteById(id);
@@ -80,203 +64,15 @@ public class ReservationController {
 
 //     Form step 0
 //
-//      Entry point to begin the reservation process.
+//      Entry point to begin the reservation process. Dates
 
-//    @GetMapping("/reservation")
-//    public String getDateForm(@RequestParam(value = "podId") Long podId,
-//                              @ModelAttribute("reservationForm") ReservationForm reservationForm)
-//            throws NotFoundException {
-//        reservationForm.enterStep(ReservationForm.Step.Dates);
-//
-//        Optional<Pod> maybePod = podRepository.findById(podId);
-//        if (!maybePod.isPresent()) {
-//            throw new NotFoundException();
-//        }
-//
-//        maybePod.get().setReservations((List<Reservation>) reservationForm.getReservation());
-//
-//        return "reservation/dates";
-//    }
+    // Form step 1 - Guest
 
-    @PostMapping("/reservation/dates")
-    public String dates(@Valid @ModelAttribute("reservationForm") ReservationForm reservationForm,
-                        BindingResult bindingResult,
-                        RedirectAttributes redirectAttributes) {
-        reservationForm.enterStep(ReservationForm.Step.Dates);
 
-        if (bindingResult.hasErrors()) {
-            return "reservation/dates";
-        }
+  //  Form step 2 - review reservation
 
-        Optional<ReservationDates.ValidationError> validationError =
-                reservationForm.getReservation().getDates().validate(timeProvider.localDate());
+//    Form step 3 - payment
 
-        if (validationError.isPresent()) {
-            bindingResult.rejectValue("reservation.dates", validationError.get().getCode(),
-                    validationError.get().getReason());
-            return "reservation/dates";
-        }
-
-        reservationForm.completeStep(ReservationForm.Step.Dates);
-        redirectAttributes.addFlashAttribute("reservationForm", reservationForm);
-        return "redirect:/reservation/guests";
-    }
-
-    @PostMapping(value = "/reservation/dates", params = "cancel")
-    public String cancelDates(SessionStatus sessionStatus) {
-        sessionStatus.setComplete();
-        return "redirect:/";
-    }
-
-//
-    // Form step 1
-
-    @GetMapping("/reservation/guests")
-    public String getGuestForm(@ModelAttribute("reservationForm") ReservationForm reservationForm, Model model) {
-        reservationForm.enterStep(ReservationForm.Step.Guests);
-        model.addAttribute("guest", new Guest());
-        return "reservation/guests";
-    }
-
-    @PostMapping(value = "/reservation/guests", params = "back")
-    public String fromGuestBackToDates(@ModelAttribute("reservationForm") ReservationForm reservationForm,
-                                       RedirectAttributes ra) {
-        reservationForm.enterStep(ReservationForm.Step.Guests);
-        ra.addFlashAttribute("reservationForm", reservationForm);
-        return "redirect:/reservation?podId=" + reservationForm.getReservation().getPod().getId();
-    }
-
-    @PostMapping(value = "/reservation/guests", params = "addGuest")
-    public String postAddGuest(@Valid @ModelAttribute("guest") Guest guest,
-                               BindingResult bindingResult,
-                               @ModelAttribute("reservationForm") ReservationForm reservationForm,
-                               Model model) {
-        reservationForm.enterStep(ReservationForm.Step.Guests);
-
-        if (bindingResult.hasErrors()) {
-            return "reservation/guests";
-        }
-
-        if (reservationForm.getReservation().getGuests().contains(guest)) {
-            bindingResult.reject("exists", "A guest with this name already exists");
-            return "reservation/guests";
-        }
-//
-//        if (reservationForm.getReservation().isOccuipied()) {
-//            bindingResult.reject("guestLimitExceeded", "This pod has the maximum number of guests");
-//            return "reservation/guests";
-//        }
-//
-//        reservationForm.getReservation().addGuest(guest);
-//
-//
-//        model.addAttribute("guest", new Guest());
-//
-//        return "reservation/guests";
-//    }
-//
-//    @PostMapping(value = "/reservation/guests", params = "removeGuest")
-//    public String postRemoveGuest(@RequestParam("removeGuest") Guest guestId,
-//                                  @ModelAttribute("reservationForm") ReservationForm reservationForm,
-//                                  Model model) {
-//        reservationForm.enterStep(ReservationForm.Step.Guests);
-////        reservationForm.getReservation().removeGuestById(guestId);
-//        model.addAttribute("guest", new Guest());
-//        return "reservation/guests";
-//    }
-//
-//    @PostMapping(value = "/reservation/guests")
-//    public String postGuestToExtras(@ModelAttribute(binding = false) Guest guest,
-//                                    Errors errors,
-//                                    @ModelAttribute("reservationForm") ReservationForm reservationForm,
-//                                    RedirectAttributes redirectAttributes) {
-//        reservationForm.enterStep(ReservationForm.Step.Guests);
-//
-//        if (!reservationForm.getReservation().getPod().isOccupied()) {
-//            errors.reject("guests.noneExist", "There must be at least 1 guest");
-//            return "reservation/guests";
-//        }
-//
-//        redirectAttributes.addFlashAttribute("reservationForm", reservationForm);
-//
-//        reservationForm.completeStep(ReservationForm.Step.Guests);
-//        return "redirect:/reservation/review";
-//    }
-//
-//
-//    // Form step 2 - review
-//
-//
-//    @GetMapping("/reservation/review")
-//    public String getReview(@ModelAttribute("reservationFlow") ReservationForm reservationForm) {
-//        reservationForm.setActive(ReservationForm.Step.Review);
-//        return "reservation/review";
-//    }
-//
-//    @PostMapping(value = "/reservation/review", params = "back")
-//    public String fromReviewBackToGuests(@ModelAttribute("reservationFlow") ReservationForm reservationForm,
-//                                            RedirectAttributes ra) {
-//        reservationForm.setActive(ReservationForm.Step.Review);
-//        ra.addFlashAttribute("reservationForm", reservationForm);
-//        return "redirect:/reservation/guests";
-//    }
-//
-//    @PostMapping("/reservation/review")
-//    public String postReview(@ModelAttribute("reservationForm") ReservationForm reservationForm,
-//                             RedirectAttributes ra) {
-//        reservationForm.setActive(ReservationForm.Step.Review);
-//
-//        ra.addFlashAttribute("reservationFlow", reservationForm);
-//        reservationForm.completeStep(ReservationForm.Step.Review);
-//        return "redirect:/reservation/payment";
-//    }
-//
-//
-//    // Form step 3 - payment
-//
-//    @GetMapping("/reservation/payment")
-//    public String getPayment(@ModelAttribute("reservationForm") ReservationForm reservationForm,
-//                             Model model) {
-//        reservationForm.setActive(ReservationForm.Step.Payment);
-//        model.addAttribute("pendingPayment", new PendingPayment(LocalDateTime.now()));
-//        return "reservation/payment";
-//    }
-//
-//    @PostMapping(value = "/reservation/payment", params = "back")
-//    public String fromPaymentBackToReview(@ModelAttribute("reservationForm") ReservationForm reservationForm,
-//                                          RedirectAttributes ra) {
-//        reservationForm.setActive(ReservationForm.Step.Payment);
-//        ra.addFlashAttribute("reservationForm", reservationForm);
-//        return "redirect:/reservation/review";
-//    }
-//
-//    @PostMapping(value = "/reservation/payment", params = "cancel")
-//    public String cancelPayment(SessionStatus sessionStatus) {
-//        sessionStatus.setComplete();
-//        return "redirect:/";
-//    }
-//
-//    @PostMapping("/reservation/payment")
-//    public String postPayment(@ModelAttribute("reservationForm") ReservationForm reservationForm,
-//                              @Valid @ModelAttribute("pendingPayment") PendingPayment pendingPayment,
-//                              BindingResult bindingResult, SessionStatus sessionStatus) {
-//        reservationForm.setActive(ReservationForm.Step.Payment);
-//
-//        if (bindingResult.hasErrors()) {
-//            return "reservation/payment";
-//        }
-//
-//        Reservation reservation = reservationForm.getReservation();
-//        // Simulate making a valid payment
-//        reservation.setCompletedPayment(pendingPayment.toCompletedPayment());
-//
-//        podRepository.save(reservation.getPod());
-//        sessionStatus.setComplete();
-//
-//        reservationForm.completeStep(ReservationForm.Step.Payment);
-//        return "redirect:/reservation/completed";
-//    }
-//
     // End form
 
     @GetMapping("/reservation/completed")
