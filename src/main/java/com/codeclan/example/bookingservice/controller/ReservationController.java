@@ -1,27 +1,15 @@
 package com.codeclan.example.bookingservice.controller;
 
-import com.codeclan.example.bookingservice.TimeProvider;
-import com.codeclan.example.bookingservice.models.Guest;
-import com.codeclan.example.bookingservice.models.NotFoundException;
-import com.codeclan.example.bookingservice.models.Pod;
 import com.codeclan.example.bookingservice.models.Reservation;
+import com.codeclan.example.bookingservice.repositories.GuestRepository;
 import com.codeclan.example.bookingservice.repositories.PodRepository;
 import com.codeclan.example.bookingservice.repositories.ReservationRepository;
-import com.codeclan.example.bookingservice.reservationprocess.PendingPayment;
-import com.codeclan.example.bookingservice.reservationprocess.ReservationDates;
 import com.codeclan.example.bookingservice.reservationprocess.ReservationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
@@ -32,6 +20,9 @@ public class ReservationController {
 
     @Autowired
     PodRepository podRepository;
+
+    @Autowired
+    GuestRepository guestRepository;
 
 //    private TimeProvider timeProvider;
 
@@ -60,8 +51,8 @@ public class ReservationController {
     @PutMapping(value="/reservations/{id}")
     public ResponseEntity<Reservation> putReservation(@RequestBody Reservation reservation, @PathVariable Long id){
         Reservation reservationToUpdate = reservationRepository.findById(id).get();
-        reservationToUpdate.setDates(reservation.getDates());
-        reservationToUpdate.setPod(reservation.getPod());
+        reservationToUpdate.setCheckInDate(reservation.getCheckInDate());
+        reservationToUpdate.setCheckOutDate(reservation.getCheckOutDate());
         reservationToUpdate.setGuest(reservation.getGuest());
         reservationRepository.save(reservationToUpdate);
         return new ResponseEntity<>(reservationToUpdate, HttpStatus.OK);

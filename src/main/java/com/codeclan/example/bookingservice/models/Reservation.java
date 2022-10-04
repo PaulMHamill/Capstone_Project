@@ -1,16 +1,15 @@
 package com.codeclan.example.bookingservice.models;
 
 import com.codeclan.example.bookingservice.reservationprocess.CompletedPayment;
-import com.codeclan.example.bookingservice.reservationprocess.ReservationDates;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 
 @Entity
@@ -32,11 +31,15 @@ public class Reservation {
 //    @Column(name = "numberOfNights")
 //    private int numberOfNights;
 
-//    @Column(name = "date_from")
-//    private LocalDate dateFrom;
-//
-//    @Column(name = "date_to")
-//    private LocalDate dateTo;
+    @Column
+    @NotNull(message = "Check in date required")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate checkInDate;
+
+    @Column
+    @NotNull(message = "Check out date required")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate checkOutDate;
 
     @Column(name = "total_price")
     private double totalPrice;
@@ -44,7 +47,7 @@ public class Reservation {
     @OneToOne(cascade = CascadeType.ALL)
     private CompletedPayment completedPayment;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime createdTime;
 
 //    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -55,19 +58,17 @@ public class Reservation {
 //    )
 //    private Set<Guest> guests = new HashSet<>();
 
-    @Embedded
-    @Valid
-    private ReservationDates reservationDates;
 
     public Reservation() {
     }
 
 
-    public Reservation(Pod pod, Guest guest, LocalDate dateFrom, LocalDate dateTo) {
+    public Reservation(Pod pod, Guest guest, LocalDate checkInDate, LocalDate checkOutDate) {
         this.pod = pod;
         this.guest = guest;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
         this.createdTime = LocalDateTime.now();
-        this.reservationDates = new ReservationDates(dateFrom, dateTo);
         this.totalPrice = getTotalPrice();
     }
 
@@ -95,6 +96,22 @@ public class Reservation {
         this.id = id;
     }
 
+    public LocalDate getCheckInDate() {
+        return checkInDate;
+    }
+
+    public void setCheckInDate(LocalDate checkInDate) {
+        this.checkInDate = checkInDate;
+    }
+
+    public LocalDate getCheckOutDate() {
+        return checkOutDate;
+    }
+
+    public void setCheckOutDate(LocalDate checkOutDate) {
+        this.checkOutDate = checkOutDate;
+    }
+
     public Guest getGuest() {
         return guest;
     }
@@ -103,32 +120,19 @@ public class Reservation {
         this.guest = guest;
     }
 
-//    public LocalDate getDateFrom() {
-//        return dateFrom;
-//    }
-//
-//    public void setDateFrom(LocalDate dateFrom) {
-//        this.dateFrom = dateFrom;
-//    }
-//
-//    public LocalDate getDateTo() {
-//        return dateTo;
-//    }
-//
-//    public void setDateTo(LocalDate dateTo) {
-//        this.dateTo = dateTo;
-//    }
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 
-//    public double getTotalPrice() {
-//        return totalPrice;
-//    }
-
-//    public void setTotalPrice(double totalPrice) {
-//        this.totalPrice = totalPrice;
-//    }
+    public long totalNights() {
+        if (checkInDate == null || checkOutDate == null) {
+            return 0;
+        }
+        return ChronoUnit.DAYS.between(checkInDate, checkOutDate);
+    }
 
     public double getTotalPrice() {
-        totalPrice = this.reservationDates.totalNights() * this.pod.getNightlyRate();
+        totalPrice = this.totalNights() * this.pod.getNightlyRate();
         return totalPrice;
     }
 
@@ -150,13 +154,6 @@ public class Reservation {
     }
 
 
-    public ReservationDates getDates() {
-        return reservationDates;
-    }
-
-    public void setDates(ReservationDates dates) {
-        this.reservationDates = dates;
-    }
 
 //    public Set<Guest> getGuests() {
 //        return Collections.unmodifiableSet(guests);
@@ -176,5 +173,47 @@ public class Reservation {
 //        Reservation reservation = new Reservation(numberOfNights, pod);
 //        return reservation;
 
+
+//    public Optional<ReservationDates.ValidationError> validate(LocalDate now) {
+//        if (checkInDate == null) {
+//            return Optional.of(new ReservationDates.ValidationError("checkInDate.missing", "Missing check in date"));
+//        } else if (checkOutDate == null) {
+//            return Optional.of(new ReservationDates.ValidationError("checkOutDate.missing", "Missing check out date"));
+//        } else if (checkInDate.isBefore(now)) {
+//            return Optional.of(new ReservationDates.ValidationError("checkInDate.future", "Check in date must be in the future"));
+//        } else if (checkOutDate.isBefore(checkInDate)) {
+//            return Optional.of(new ReservationDates.ValidationError("checkOutDate.afterCheckIn", "Check out date must occur after check in date"));
+//        } else if (totalNights() < 1) {
+//            // handles case where check in/out dates are the same.
+//            return Optional.of(new ReservationDates.ValidationError("checkOutDate.minNights", "Reservation must be for at least 1 night"));
+//        }
+//        return Optional.empty();
+//    }
+
+    public static class ValidationError {
+        private String code;
+        private String reason;
+
+        public ValidationError(String code, String reason) {
+            this.code = code;
+            this.reason = reason;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getReason() {
+            return reason;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "ReservationDates{" +
+                "checkInDate=" + checkInDate +
+                ", checkOutDate=" + checkOutDate +
+                '}';
+    }
 
 }
